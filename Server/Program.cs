@@ -7,48 +7,48 @@ using System.Threading;
 
 class Server
 {
-    
     static void Main(string[] args)
     {
-        // Sunucu için IP ve port ayarları
+        // Sunucu için IP ve port ayarlarını yapalım
         string ip = "127.0.0.1";
         int port = 8080;
 
-        // Sunucu soketi oluşturma
+        // Sunucu soketi oluşturuyoruz
         TcpListener server = new TcpListener(IPAddress.Parse(ip), port);
         server.Start();
-        Console.WriteLine("Sunucu çalışıyor, istemciler bekleniyor...");
+        Console.WriteLine("Sunucu başlatıldı, istemciler bağlanıyor...");
 
-        // İstemci bağlantısını kabul et
+        // İstemci bağlantısını bekliyoruz
         TcpClient client = server.AcceptTcpClient();
-        Console.WriteLine("Bir istemci bağlandı.");
+        Console.WriteLine("İstemci bağlandı!");
 
         NetworkStream stream = client.GetStream();
         byte[] buffer = new byte[1024];
 
-        // Sistem verilerini her 5 saniyede bir gönder
+        // 5 saniyede bir CPU kullanım bilgisini göndereceğiz
         while (true)
         {
             string cpuUsage = GetCpuUsage();
             buffer = Encoding.ASCII.GetBytes(cpuUsage);
 
-            // İstemciye veriyi gönder
+            // Veriyi istemciye gönderiyoruz
             stream.Write(buffer, 0, buffer.Length);
-            Console.WriteLine("İstemciye veri gönderildi: " + cpuUsage);
+            Console.WriteLine("Veri gönderildi: " + cpuUsage);
 
-            Thread.Sleep(5000); // 5 saniye bekle
+            Thread.Sleep(5000); // 5 saniye bekliyoruz
         }
     }
 
-    // CPU kullanım oranını almak için bir yöntem
+    // CPU kullanımını almak için basit bir fonksiyon
     static string GetCpuUsage()
     {
-        // CPU kullanımı bilgisini al
+        // CPU kullanımını almak için performans sayacını kullanıyoruz
         var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-        cpuCounter.NextValue(); // İlk değer hemen çıkmayabilir, ikinci okuma daha doğru olur.
-        Thread.Sleep(1000); // 1 saniye bekleyerek doğru veriyi al
+        cpuCounter.NextValue(); // İlk okuma hemen doğru değeri vermez
+        Thread.Sleep(1000); // Bir saniye bekleyip doğru sonucu alıyoruz
         float cpuValue = cpuCounter.NextValue();
         return $"CPU Kullanımı: {cpuValue}%";
     }
 }
+
 
