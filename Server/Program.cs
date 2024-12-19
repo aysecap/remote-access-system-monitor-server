@@ -25,13 +25,13 @@ class Server
         NetworkStream stream = client.GetStream();
         byte[] buffer = new byte[1024];
 
-        // 5 saniyede bir CPU kullanım bilgisini göndereceğiz
+        // 5 saniyede bir CPU kullanım bilgisini göndericem
         while (true)
         {
             string cpuUsage = GetCpuUsage();
             buffer = Encoding.ASCII.GetBytes(cpuUsage);
 
-            // Veriyi istemciye gönderiyoruz
+            // Veriyi istemciye göndericem
             stream.Write(buffer, 0, buffer.Length);
             Console.WriteLine("Veri gönderildi: " + cpuUsage);
 
@@ -47,7 +47,7 @@ class Server
         cpuCounter.NextValue(); // İlk okuma hemen doğru değeri vermez
         Thread.Sleep(1000); // Bir saniye bekleyip doğru sonucu alıyoruz
         float cpuValue = cpuCounter.NextValue();
-        return $"CPU Kullanımı: {cpuValue}%";
+        return $"CPU Kullanimi: {cpuValue}%";
     }
 }
 
